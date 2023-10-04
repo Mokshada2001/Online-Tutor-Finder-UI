@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration</title>
+  <link rel="stylesheet" href="registerstyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+  <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <header>Registration Form</header>
+        <div class="alert">You have successfylly registered</div>
+        <form action="#" id="registerForm">
+            
+            <div class="field email">
+                <div class="input-area">
+                    <input type="text" id="email" placeholder="Email Address">
+                    <i class="icon fas fa-envelope"></i>
+                    <i class="error error-icon fas fa-exclamation-circle"></i>
+                </div>
+                <div class="error error-txt">Email can't be blank</div>
+            </div>
+        
+            <div class="field password">
+                <div class="input-area">
+                <input type="password" id="password" placeholder="Password">
+                <i class="icon fas fa-lock"></i>
+                <i class="error error-icon fas fa-exclamation-circle"></i>
+            </div>
+            <div class="error error-txt">Password can't be blank</div>
+            </div>
+
+            <div class="field password1">
+                <div class="input-area">
+                <input type="password" id="cnfp" placeholder="Confirm Password">
+                <i class="icon fas fa-lock"></i>
+                <i class="error error-icon fas fa-exclamation-circle"></i>
+            </div>
+            <div class="error error-txt">Password can't be blank</div>
+            </div>
+
+            <input type="submit"  id="register" onclick="document.location='register11.html'" value="Register"><br>
+            
+        </form>
+    </div>
+
+  <script src="register_validation.js"></script>
+  
+</body>
+<script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+    import { getDatabase, set, ref } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+   
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    //Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCk_TjzsOcNneEbmbMZSoPUZ9EzHJqeG2g",
+      authDomain: "authentication-a2146.firebaseapp.com",
+      databaseURL: "https://authentication-a2146-default-rtdb.firebaseio.com",
+      projectId: "authentication-a2146",
+      storageBucket: "authentication-a2146.appspot.com",
+      messagingSenderId: "128738124138",
+      appId: "1:128738124138:web:f37f651082e7e49c504513"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth();
+  
+    register.addEventListener('click', (e) => {
+         
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        var cnfp = document.getElementById('cnfp').value;
+
+        createUserWithEmailAndPassword(auth, email, password, cnfp)
+        .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+
+            set(ref(database, 'users/' + user.uid), {
+                email : email
+            })
+
+            alert('User Created!');
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // ..
+
+            alert(errorMessage);
+        });
+    });
+  
+  </script>
+
+
+</html>
